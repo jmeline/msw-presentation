@@ -30,3 +30,19 @@ export async function getUserRepos(username = validateUser()) {
   }
   return await response.json()
 }
+
+
+const githubSearchApi = "https://api.github.com/search/users?"
+export async function searchForUser(searchParam = "") {
+  const response = await fetch(githubSearchApi + new URLSearchParams(`q=${searchParam}`), {
+    headers: {
+      'Content-Type': 'application/vnd.github.v3+json'
+    }
+  })
+
+  if (!response.ok) {
+    console.log(response.error);
+    return;
+  }
+  return await response.json()
+}

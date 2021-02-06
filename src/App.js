@@ -2,28 +2,28 @@ import React, { useEffect, useState } from 'react';
 // import './App.css';
 import { getUser, getUserRepos } from "./api/api"
 import DeveloperInfo from "./components/DeveloperInfo"
+import DeveloperSearch from "./components/DeveloperSearch"
 import Typography from "@material-ui/core/Typography"
+import SearchIcon from '@material-ui/icons/Search';
+import Input from '@material-ui/core/Input';
 
 function App() {
-  const [user, setUser] = useState("");
+  const [users, setUsers] = useState([]);
+  const [developers, setDevelopers] = useState([]);
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("")
 
   useEffect(() => {
-    const user = "jmeline"
-    getUser(user)
-      .then(data => {
-        setUser(data)
-        setLoading(false)
-        });
+    // const user = "jmeline"
+    // getUser(user)
+    //   .then(data => {
+    //     setUser(data)
+    //     setLoading(false)
+    //     });
   }, [])
 
-  if (loading) {
-    return <div> Loading data </div>
-  }
-
-  console.log(user)
+  console.log(users)
   console.log(repos)
 
   return (
@@ -33,17 +33,18 @@ function App() {
           Developer showcase
         </Typography>
         <hr />
-        <div>
-        <label htmlFor="developer">Find Developer: </label>
-        <input
-          id="developer"
-          value={text}
-          onChange={e => setText(e.target.value)}/>
-        </div>
+        <DeveloperSearch setDevelopers={setDevelopers}/>
       </div>
-      <div style={{ padding: 10 }}>
-        <DeveloperInfo user={user} />
-      </div>
+
+    {
+        !loading 
+        ? developers.map(developer => 
+        <div key={developer.login} style={{ padding: 10 }}>
+            <DeveloperInfo developer={developer} />
+        </div> 
+        )
+        : null
+    }
     </div>
   );
 }

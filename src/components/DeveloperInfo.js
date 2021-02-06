@@ -18,68 +18,65 @@ const useStyles = makeStyles(theme => ({
     display: "flex"
   },
   media: {
-    width: 125
-  },
-  largeAvatar: {
-    width: theme.spacing(10),
-    height: theme.spacing(10)
+    width: 130
   },
   link: {
     textDecoration: "underline"
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
+  }
 }))
 
-const DeveloperInfo = ({ user }) => {
+const DeveloperInfo = ({ developer }) => {
   const classes = useStyles()
   const [repos, setRepos] = useState([])
   const [loading, setLoading] = useState(true)
   const [showMoreInfo, setShowMoreInfo] = useState(false)
 
   useEffect(() => {
-    getUserRepos(user.login)
+    getUserRepos(developer.login)
       .then(data => {
         setRepos(data)
         setLoading(false)
       })
-  }, [user.login])
+  }, [developer.login])
 
   if (loading) {
     return <Typography variant="h4"> Loading Developer details</Typography>
   }
 
-  const favoriteLanguages = repos?.reduce((acc, repo) => {
+  const counts = repos?.reduce((acc, repo) => {
     if (!repo?.language) {
       return acc
     }
     return {...acc, [repo.language]: (acc[repo.language] ?? 0) + 1 }
   }, {})
 
+  const favoriteLanguages = Object.entries(counts)
+    .map(x => x)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(lang => `${lang[0]}(${lang[1]})`)
+    .join(", ")
+
   return (
     <Card className={classes.root} variant="outlined">
-      <CardMedia className={classes.media} image={user.avatar_url} />
-      <div style={{ display: "flex", flexDirection: 'column'}}>
+      <CardMedia className={classes.media} image={developer.avatar_url} />
         <CardContent>
           <Typography variant="h6">
-            Name: <Link className={classes.link} color="inherit" href={user.html_url}> {user.name}</Link>
+            Name: <Link className={classes.link} color="inherit" href={developer.html_url}> {developer.name}</Link>
           </Typography>
           <Typography variant="h6">
-            Company: {user.company}
+            Company: {developer.company}
           </Typography>
           <Typography variant="h6">
-            Location: {user.location ?? "Unknown"}
+            Location: {developer.location ?? "Unknown"}
+          </Typography>
+          <Typography variant="h6">
+            Favorite languages: {favoriteLanguages}
           </Typography>
         </CardContent>
-      </div>
+        <CardActions>
+          Delete goes here
+        </CardActions>
     </Card>
   )
 }

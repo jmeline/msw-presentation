@@ -6,12 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { createMuiTheme } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/styles"
 
-const theme = createMuiTheme({
-  palette: {
-    type: 'dark',
-  }
-
-})
+const theme = createMuiTheme()
 
 const component =
   <ThemeProvider theme={theme}>
