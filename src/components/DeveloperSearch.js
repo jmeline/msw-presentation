@@ -5,6 +5,7 @@ import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
+import Typography from "@material-ui/core/Typography"
 import Avatar from "@material-ui/core/Avatar"
 import Link from "@material-ui/core/Link"
 import styled from "styled-components"
@@ -34,6 +35,14 @@ const StyledDeveloperSearchCardDiv = styled.div`
 
 const StyledLabel = styled.div`
   margin-right: 10px;
+`
+
+const StyledDeveloperSearchDiv = styled.div`
+  height: 36em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 15;
+  border: 2px gray solid;
 `
 
 export default function DeveloperSearch({ setDevelopers }) {
@@ -93,38 +102,6 @@ export default function DeveloperSearch({ setDevelopers }) {
       .catch(error => console.log("I took an error", error))
   }
 
-  const body = (
-    <>
-      <div style={{ padding: 10, display: "flex", alignItems: "baseline", justifyItems: "center" }}>
-        <StyledLabel htmlFor="developer">Find Developer: </StyledLabel>
-        <input id="developer" value={text} onChange={e => setText(e.target.value)} />
-        <Button onClick={handleSearch}>Search</Button>
-      </div>
-      <div
-        style={{
-          height: "36em",
-          overflowX: "hidden",
-          overflowY: "auto",
-          padding: 15,
-          border: "2px gray solid"
-        }}>
-        {loading
-          ? "Loading possible developer"
-          : possibleOptions?.items?.map(developer => (
-              <StyledDeveloperSearchCardDiv
-                key={developer.login}
-                onClick={() => handleSelectingDeveloper(developer.login)}
-                selected={selectedDevelopers.includes(developer.login)}>
-                <div style={{ flex: 1 }}>
-                  <Avatar className={classes.large} src={developer.avatar_url} />
-                </div>
-                <Link href={developer.html_url}>{developer.login}</Link>
-              </StyledDeveloperSearchCardDiv>
-            ))}
-      </div>
-    </>
-  )
-
   return (
     <div>
       <Button color="primary" onClick={handleOpen}>
@@ -139,7 +116,56 @@ export default function DeveloperSearch({ setDevelopers }) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add Developer</DialogTitle>
-        <DialogContent>{body}</DialogContent>
+        <DialogContent>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <StyledLabel htmlFor="developer">Find Developer: </StyledLabel>
+            <input
+              style={{ marginRight: 10 }}
+              id="developer"
+              value={text}
+              onChange={e => setText(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              size="small"
+              disableElevation
+              onClick={handleSearch}>
+              Search
+            </Button>
+          </div>
+        </DialogContent>
+        <DialogContent>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Typography style={{marginRight: 10}}>Selected: {selectedDevelopers.length}</Typography>
+            <Button
+              variant="contained"
+              size="small"
+              disableElevation
+              onClick={() => setSelectedDevelopers([])}>
+              Reset
+            </Button>
+          </div>
+        </DialogContent>
+        <DialogContent>
+          <StyledDeveloperSearchDiv>
+            {loading
+              ? <Typography> Loading Developers </Typography>
+              : possibleOptions?.items?.map(developer => (
+                  <StyledDeveloperSearchCardDiv
+                    key={developer.login}
+                    onClick={() => handleSelectingDeveloper(developer.login)}
+                    selected={selectedDevelopers.includes(developer.login)}>
+                    <div style={{ flex: 1 }}>
+                      <Avatar
+                        className={classes.large}
+                        src={developer.avatar_url}
+                      />
+                    </div>
+                    <Link href={developer.html_url}>{developer.login}</Link>
+                  </StyledDeveloperSearchCardDiv>
+                ))}
+          </StyledDeveloperSearchDiv>
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
