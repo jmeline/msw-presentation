@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# Who am I?
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# MSW
 
-## Available Scripts
+In order to better understand how MSW operates, let's take a look at what service workers do.
 
-In the project directory, you can run:
+# Service workers (4)
 
-### `yarn start`
+## What is a service worker?
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* A **service worker** is a type of web worker that runs from your browser. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* It runs separate from your website on a separate thread. Therefore, it **cannot interact with the dom**. 
 
-### `yarn test`
+* These web workers have the ability to intercept, modify, and response to **all network requests** using the fetch api.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* Service workers can access the Cache Api and asynchronous client side data stores, such as IndexedDb, to store resources.
 
-### `yarn build`
+* In other words, it is a **programmable network proxy**. 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Why do I need it?
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Service workers can deliver a **much better offline experience** to the user.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Web sites act more like **native applications**. These special web sites have a name: **Progressive Web App**
 
-### `yarn eject`
+## How do you create a service worker? Example!!!
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* Using the CRA-pwa template, we can get started playing around with intercepting network traffic. Here is a dumb app that returns dogs when the site loads up.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Service workers **must be served via HTTPS** for security reasons since they literally act as a "Man in the middle". **Localhost is considered a secure origin by browsers**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* Because we're going to use the CRA-pwa template, it requires production in order to run the service worker. 
+    * Get started with service workers by modifying the service worker.js file
+    * There is a lot of junk in there that we don't care about for this example.
+        * Comment it all out.
+        * Lets add a couple listeners here.
+            * Discussion about service worker life cycle.
+            * **INSTALL **
+                * caching happens here.
+            * **ACTIVATE **
+                * handling of old caches
+                * only after the activate step will the service worker control all pages that fall under its scope.
+            * **EVENTS **
+                * fetch
+    * This file is executed within the browser. "self" refers to the service worker. It is entirely event based 
+* 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## MSW
+    * Young library 1 year.
+    * A service worker that can help you test, develop, and debug your web apps.
+    * 
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Mocking Fetch? (3)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Can't we just mock fetch and move on with our lives?
 
-### Code Splitting
+Yes, but...
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Mocking is an important tool when testing applications. We use it to avoid hitting a database, a payment api, and other concerns outside of our application.
 
-### Analyzing the Bundle Size
+jest.mock helps you to mock an entire implmementation of something. If you mock a request library, it no longer behaves as it usually does. Your mock will do exactly as you told it. You become in charge of them. Need to verify the content-type or accepted-content? header content in your test? You must build it up.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Need to handle this in more than one test? Well, you will have to maintain it in each test.
+```
+jest.spyOn('window', 'fetch')
+```
 
-### Making a Progressive Web App
+What happens if we're joining a large project where developers used different libraries for GET/POST? MSW doesn't care. Your handlers will be compatible with those libraries.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+## Mocking Api Requests using MSW (remaining time)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+### testing using jest
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### independent development
 
-### `yarn build` fails to minify
+### debugging your environment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Handling Errors
