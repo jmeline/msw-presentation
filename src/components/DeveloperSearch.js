@@ -25,6 +25,7 @@ const StyledDeveloperSearchCardDiv = styled.div`
   align-items: center;
   padding: 20px 20px;
   border: 2px gray dashed;
+  margin: 10px;
   margin-bottom: 10px;
   cursor: pointer;
   background: ${({ selected }) => (selected ? "lightgray" : "white")};

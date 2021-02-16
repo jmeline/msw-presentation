@@ -63,6 +63,7 @@ Mocking is an important tool when testing applications. We use it to avoid hitti
 jest.mock helps you to mock an entire implmementation of something. If you mock a request library, it no longer behaves as it usually does. Your mock will do exactly as you told it. You become in charge of them. Need to verify the content-type or accepted-content? header content in your test? You must build it up.
 
 Need to handle this in more than one test? Well, you will have to maintain it in each test.
+
 ```
 jest.spyOn('window', 'fetch')
 ```
@@ -72,8 +73,9 @@ What happens if we're joining a large project where developers used different li
 
 ## Mocking Api Requests using MSW (remaining time)
 
-
 ### testing using jest
+
+Since service workers can only work in the browser. When running tests, MSW will intercept requests via node-request-interceptor. Even though there is a "server" in serviceWorker, there isn't a server that is spun-up. 
 
 ### independent development
 

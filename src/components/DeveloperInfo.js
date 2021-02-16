@@ -12,7 +12,8 @@ import DeleteIcon from "@material-ui/icons/Delete"
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    border: "1px solid black"
   },
   media: {
     width: 130
@@ -26,7 +27,6 @@ const DeveloperInfo = ({ developer, onDelete }) => {
   const classes = useStyles()
   const [repos, setRepos] = useState([])
   const [loading, setLoading] = useState(true)
-  const [showMoreInfo, setShowMoreInfo] = useState(false)
 
   useEffect(() => {
     getUserRepos(developer.login).then(([data, error]) => {
