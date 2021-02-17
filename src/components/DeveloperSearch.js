@@ -82,7 +82,7 @@ export default function DeveloperSearch({ setDevelopers }) {
       (developer, index, self) => self.indexOf(developer) === index
     )
 
-    Promise.all(
+    const developers = await Promise.all(
       uniqueDevelopers.map(async developer => {
         const [resp, error] = await getUser(developer)
         if (error) {
@@ -93,11 +93,9 @@ export default function DeveloperSearch({ setDevelopers }) {
         return resp
       })
     )
-      .then(users => {
-        setDevelopers(currentUsers => [...users, ...currentUsers])
-        setOpen(false)
-      })
-      .catch(error => console.log("I took an error", error))
+
+    setDevelopers(currentDevelopers => [...developers, ...currentDevelopers])
+    setOpen(false)
   }
 
   return (
@@ -167,9 +165,9 @@ export default function DeveloperSearch({ setDevelopers }) {
                       src={developer.avatar_url}
                     />
                   </div>
-                  <Link href={developer.html_url}>
+                  {/* <Link href={developer.html_url}> */}
                     <Typography variant="h5">{developer.login}</Typography>
-                  </Link>
+                  {/* </Link> */}
                 </StyledDeveloperSearchCardDiv>
               ))
             )}

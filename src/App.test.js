@@ -9,16 +9,25 @@ import userEvent from "@testing-library/user-event"
 import App from "./App"
 import server from "./mocks/server"
 import { rest } from "msw"
-import DeveloperSearch from "./components/DeveloperSearch"
 import { octocat_avatar } from "./mocks/mock_utils"
 
 beforeAll(() => server.listen({ onUnhandledRequest: "warn" }))
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-const element = props => <DeveloperSearch {...props} />
+// global.fetch = jest.fn(() => {
+//   return new Promise(
+//     resolve => ({ json: () => Promise.resolve({}) }), 
+//     reject => Promise.reject([]))
+// });
 
-test.skip("developer search page", async () => {
+// beforeEach(() => {
+//   fetch.mockClear();
+// });
+
+const element = props => <App {...props} />
+
+test("developer search page", async () => {
   render(element())
 
   // Find "Search for developers" button
@@ -47,9 +56,16 @@ test.skip("developer search page", async () => {
 
   // begin fetching user data
   userEvent.click(screen.getByText("Add"))
+
+  // make sure we add the developers and then close the modal 
+  await waitForElementToBeRemoved(() => screen.getByText("Add Developer"))
+
+  // 
+  await waitFor(() => expect(screen.getByText("Favorite languages: javascript(5), clojure(2), F#(2)")).toBeInTheDocument())
+  screen.debug()
 })
 
-test.only("developer search page throws an error", async () => {
+test("developer search page throws an error", async () => {
   render(element())
 
   // Find "Search for developers" button

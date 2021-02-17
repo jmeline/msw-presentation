@@ -72,24 +72,31 @@ const ignored = self.__WB_MANIFEST;
 
 // Any other custom service worker logic can go here.
 
-self.addEventListener('install', (event) => {
-  console.log('Inside the install handler:', event);
-});
+// self refers to the internal browser context intended for web workers.
 
-self.addEventListener('activate', (event) => {
-  console.log('Inside the activate handler:', event);
-});
+// self.addEventListener("install", (event) => {
+//   // caching 
+//   console.log(`****Inside the install handler: ${event} *****`);
+// });
 
-const fetchCats = async (x, y) => {
-    console.log(`Responding with: CATS!!! https://placekitten.com/${x}/${y}`)
-    return await fetch(`https://placekitten.com/${x}/${y}`, { mode: 'no-cors'})
-}
-    
-self.addEventListener('fetch', (event) => {
-  console.log(`Intercepting ${event.request.method} to ${event.request.url}`);
-  /* Evil cat people taking over... */
-  if (/place-puppy/.test(event.request.url)) {
-    const match = event.request.url.match(/(\d+)x(\d+)/);
-    event.respondWith(fetchCats(match[1], match[2]))
-  }
-});
+// self.addEventListener("activate", (event) => {
+//   // update caching, if needed
+//   console.log(`****Inside the activate handler: ${event} *****`);
+// });
+
+// const fetchCats = async (x, y) => {
+//   console.log(`Responding with: CATS!!! https://placekitten.com/${x}/${y}`);
+//   return await fetch(`https://placekitten.com/${x}/${y}`, { mode: "no-cors" });
+// };
+
+// listeners must run synchronously!
+// self.addEventListener("fetch", (event) => {
+//   console.log(`Intercepting ${event.request.method} to ${event.request.url}`);
+//   /* Evil cat people taking over... */
+//   if (/place-puppy/.test(event.request.url)) {
+//     const match = event.request.url.match(/(\d+)x(\d+)/);
+
+//     // adjust response. Perhaps pull data from the cache and return it?
+//     event.respondWith(fetchCats(match[1], match[2]));
+//   }
+// });

@@ -106,6 +106,10 @@ afterAll(() =>  server.close())
 
 ### independent development
 
+```js
+$ npx msw init public/
+```
+
 ### debugging your environment
 
 ## Handling Errors
