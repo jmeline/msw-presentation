@@ -1,6 +1,6 @@
 const handleError = resp => {
   if (!resp.ok) {
-    Promise.reject(resp)
+    return Promise.reject(resp)
   }
   return resp
 }

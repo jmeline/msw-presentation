@@ -30,6 +30,11 @@ export default function DeveloperSearch({ setDevelopers }) {
   const [open, setOpen] = useState(false)
   const [possibleOptions, setPossibleOptions] = useState({ items: [] })
   const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState({
+    status: 400,
+    statusText: "Something went wrong"
+  })
+  const [hasError, setHasError] = useState(false)
 
   const [selectedDevelopers, setSelectedDevelopers] = useState([])
 
@@ -61,12 +66,14 @@ export default function DeveloperSearch({ setDevelopers }) {
   const handleSearch = async () => {
     setLoading(true)
     const [response, error] = await searchForUser(text ?? "")
+    setLoading(false)
     if (error) {
-      console.log(error)
+      console.log({error})
+      setHasError(true)
+      setErrorMessage(error)
       return
     }
     console.log({ response })
-    setLoading(false)
     setPossibleOptions(response)
   }
 
@@ -79,7 +86,9 @@ export default function DeveloperSearch({ setDevelopers }) {
       uniqueDevelopers.map(async developer => {
         const [resp, error] = await getUser(developer)
         if (error) {
-          Promise.reject(error)
+          setHasError(true)
+          setErrorMessage(error)
+          return
         }
         return resp
       })
@@ -139,6 +148,11 @@ export default function DeveloperSearch({ setDevelopers }) {
         </DialogContent>
         <DialogContent>
           <StyledDeveloperSearchDiv>
+            {!loading && hasError && (
+              <Typography variant="h4">
+                { errorMessage.status} - {errorMessage.statusText}
+              </Typography>
+            )}
             {loading ? (
               <Typography> Loading Developers </Typography>
             ) : (
