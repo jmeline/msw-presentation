@@ -77,6 +77,33 @@ What happens if we're joining a large project where developers used different li
 
 Since service workers can only work in the browser. When running tests, MSW will intercept requests via node-request-interceptor. Even though there is a "server" in serviceWorker, there isn't a server that is spun-up. 
 
+```shell
+yarn add -D msw 
+```
+
+Do the next few steps
+
+* Create the following directory "./src/mocks"
+* Create a server file "./src/mocks/server.js"
+* Create a handlers file "./src/mocks/handlers.js"
+
+```js
+import { setupServer } from "msw/node"
+import handlers from "./handler"
+
+const server = setupServer(...handlers);
+
+export default server; 
+```
+
+build out your handlers
+
+```js
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() =>  server.close())
+```
+
 ### independent development
 
 ### debugging your environment

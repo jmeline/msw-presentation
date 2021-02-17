@@ -1,35 +1,49 @@
 import React from "react"
-import { render } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import App from "./App"
+import server from "./mocks/server"
+import DeveloperSearch from "./components/DeveloperSearch"
+import { octocat_avatar } from "./mocks/mock_utils"
 
-const mockUserSearch = (userName) => ({
-    avatar_url: `https://avatars.githubusercontent.com/u/5539624?v=4`,
-    events_url: `https://api.github.com/users/${userName}/events{/privacy}`,
-    followers_url: `https://api.github.com/users/${userName}/followers`,
-    following_url: `https://api.github.com/users/${userName}/following{/other_user}`,
-    gists_url: `https://api.github.com/users/${userName}/gists{/gist_id}`,
-    gravatar_id: ``,
-    html_url: `https://github.com/${userName}`,
-    id: 5539624,
-    login: `${userName}`, //<-- this is important
-    node_id: `MDQ6VXNlcjU1Mzk2MjQ=`,
-    organizations_url: `https://api.github.com/users/${userName}/orgs`,
-    received_events_url: `https://api.github.com/users/${userName}/received_events`,
-    repos_url: `https://api.github.com/users/${userName}/repos`,
-    score: 1,
-    site_admin: false,
-    starred_url: `https://api.github.com/users/${userName}/starred{/owner}{/repo}`,
-    subscriptions_url: `https://api.github.com/users/${userName}/subscriptions`,
-    type: `User`,
-    url: `https://api.github.com/users/${userName}`
+beforeAll(() => server.listen({ onUnhandledRequest: "warn" }))
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
+
+const element = props => <DeveloperSearch {...props} />
+
+test.only("developer search page", async () => {
+  render(element())
+
+  // Find "Search for developers" button
+  userEvent.click(screen.getByText(/Developers/i))
+
+  // Enter in "jmeline" into the textbox
+  userEvent.type(screen.getByRole("textbox"), "jmeline")
+
+  // click search button 
+  userEvent.click(screen.getByText("Search"))
+
+  // wait for jmeline to appear
+  await waitFor(() => expect(screen.getByText("jmeline")).toBeInTheDocument())
+
+  // verify no one has been selected
+  expect(screen.getByText("Selected: 0")).toBeInTheDocument()
+
+  // verify the image is octocat
+  expect(screen.getByRole("img")).toHaveAttribute("src", octocat_avatar)
+
+  // click on jmeline
+  userEvent.click(screen.getByText("jmeline"))
+
+  // verify a selection was made
+  expect(screen.getByText("Selected: 1")).toBeInTheDocument()
+
+  // begin fetching user data
+  userEvent.click(screen.getByText("Add"))
 })
 
-const searchResponse = [
-  mockUserSearch("jmeline"),
-]
-
-
-test("mocking a window.fetch function?", async () => {
+test.skip("mocking a window.fetch function?", async () => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
       json: () => [{ title: "Princess Mononoke" }]
