@@ -1,9 +1,3 @@
-const githubUserApi = "https://api.github.com/users"
-
-function validateUser() {
-  throw new Error("User must be passed in!")
-}
-
 const handleError = resp => {
   if (!resp.ok) {
     Promise.reject(resp)
@@ -18,21 +12,21 @@ const handle = async promise =>
     .then(data => [data, undefined])
     .catch(error => [undefined, error])
 
-export async function fetchFromGithub(url) {
-  return await fetch(url, {
+export const fetchFromGithub = async url =>
+  await fetch(url, {
     headers: {
       "Content-Type": "application/vnd.github.v3+json"
     }
   })
-}
 
-export const getUser = async (username = validateUser()) =>
+const githubUserApi = "https://api.github.com/users"
+const githubSearchApi = "https://api.github.com/search/users?"
+
+export const getUser = async username =>
   await handle(fetchFromGithub(`${githubUserApi}/${username}`))
 
-export const getUserRepos = async (username = validateUser()) =>
+export const getUserRepos = async username =>
   await handle(fetchFromGithub(`${githubUserApi}/${username}/repos`))
-
-const githubSearchApi = "https://api.github.com/search/users?"
 
 export const searchForUser = async (searchParam = "") =>
   await handle(

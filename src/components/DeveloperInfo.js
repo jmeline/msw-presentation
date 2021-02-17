@@ -9,8 +9,9 @@ import Typography from "@material-ui/core/Typography"
 import IconButton from "@material-ui/core/IconButton"
 import Link from "@material-ui/core/Link"
 import DeleteIcon from "@material-ui/icons/Delete"
+import { getProgrammingLanguageFrequencyByRepo } from "./utilities/repoUtilities"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   root: {
     display: "flex",
     border: "1px solid black"
@@ -21,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   link: {
     textDecoration: "underline"
   }
-}))
+})
 
 const DeveloperInfo = ({ developer, onDelete }) => {
   const classes = useStyles()
@@ -39,19 +40,7 @@ const DeveloperInfo = ({ developer, onDelete }) => {
     return <Typography variant="h4"> Loading Developer details</Typography>
   }
 
-  const counts = repos?.reduce((acc, repo) => {
-    if (!repo?.language) {
-      return acc
-    }
-    return { ...acc, [repo.language]: (acc[repo.language] ?? 0) + 1 }
-  }, {})
-
-  const favoriteLanguages = Object.entries(counts)
-    .map(x => x)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6)
-    .map(lang => `${lang[0]}(${lang[1]})`)
-    .join(", ")
+  const favoriteLanguages = getProgrammingLanguageFrequencyByRepo(repos)
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -59,13 +48,22 @@ const DeveloperInfo = ({ developer, onDelete }) => {
       <CardContent style={{ flex: 1 }}>
         <Typography variant="h6">
           Name: &nbsp;
-          <Link className={classes.link} color="inherit" href={developer.html_url}>
-            {developer.name ?? "Not specified"}
+          <Link
+            className={classes.link}
+            color="inherit"
+            href={developer.html_url}>
+            {developer.name ?? developer.login}
           </Link>
         </Typography>
-        <Typography variant="h6">Company: {developer.company ?? "Unknown"}</Typography>
-        <Typography variant="h6">Location: {developer.location ?? "Unknown"}</Typography>
-        <Typography variant="h6">Favorite languages: {favoriteLanguages}</Typography>
+        <Typography variant="h6">
+          Company: {developer.company ?? "Unknown"}
+        </Typography>
+        <Typography variant="h6">
+          Location: {developer.location ?? "Unknown"}
+        </Typography>
+        <Typography variant="h6">
+          Favorite languages: {favoriteLanguages}
+        </Typography>
       </CardContent>
       <CardActions>
         <IconButton onClick={onDelete}>

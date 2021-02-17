@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import DeveloperInfo from "./components/DeveloperInfo"
 import DeveloperSearch from "./components/DeveloperSearch"
 import Typography from "@material-ui/core/Typography"
