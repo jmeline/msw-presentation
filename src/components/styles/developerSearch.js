@@ -23,5 +23,4 @@ export const StyledDeveloperSearchDiv = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   padding: 15;
-  border: 2px gray solid;
 `

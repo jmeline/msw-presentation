@@ -1,9 +1,9 @@
 // search example
 export const getExampleUserSearch = users => {
   return {
-    total_count: users.length,
+    total_count: users?.length ?? 1,
     incomplete_results: false,
-    items: users.map(mockUserSearch)
+    items: users?.map(mockUserSearch) ?? [mockUserSearch(users)]
   }
 }
 

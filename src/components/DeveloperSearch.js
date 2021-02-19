@@ -7,7 +7,6 @@ import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import Typography from "@material-ui/core/Typography"
 import Avatar from "@material-ui/core/Avatar"
-import Link from "@material-ui/core/Link"
 import { getUser } from "../api/api"
 import {
   StyledLabel,
@@ -114,7 +113,7 @@ export default function DeveloperSearch({ setDevelopers }) {
         <DialogTitle id="form-dialog-title">Add Developer</DialogTitle>
         <DialogContent>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <StyledLabel htmlFor="developer">Find Developer: </StyledLabel>
+            <Typography component="label" htmlFor="developer">Find Developer: </Typography>
             <input
               style={{ marginRight: 10 }}
               id="developer"

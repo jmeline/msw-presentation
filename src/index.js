@@ -4,12 +4,6 @@ import App from "./App"
 import { createMuiTheme } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/styles"
 
-// if (process.env.NODE_ENV === 'development') {
-//   const { worker } = require('./mocks/browser')
-//   console.log(worker)
-//   worker.start()
-// }
-
 const theme = createMuiTheme()
 
 const component = (
