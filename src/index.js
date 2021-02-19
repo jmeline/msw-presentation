@@ -6,11 +6,6 @@ import { ThemeProvider } from "@material-ui/styles"
 
 const theme = createMuiTheme()
 
-if (process.env.NODE_ENV === "development") {
-  const { worker } = require("./mocks/browser")
-  worker.start({ onUnhandledRequest: "warn" })
-}
-
 const component = (
   <ThemeProvider theme={theme}>
     <App />
