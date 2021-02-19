@@ -3,7 +3,9 @@ export const getExampleUserSearch = users => {
   return {
     total_count: users?.length ?? 1,
     incomplete_results: false,
-    items: users?.map(mockUserSearch) ?? [mockUserSearch(users)]
+    items: users instanceof Array 
+      ? users.map(mockUserSearch)
+      : [mockUserSearch(users)]
   }
 }
 
